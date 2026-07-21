@@ -8,7 +8,7 @@
     "start": "astro dev",
     "check": "astro check",
     "build": "astro check && astro build",
-    "deploy": "npm run build && gh-pages -d dist --dotfiles -m 'Deploy personal homepage'",
+    "deploy": "npm run build && gh-pages -d dist --nojekyll -m 'Deploy personal homepage'",
     "preview": "astro preview"
   },
   "dependencies": {
