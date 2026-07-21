@@ -1,0 +1,495 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Icon from '../../components/Icon.astro';
+import { siteConfig } from '../../data/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatWorkDate } from '../../lib/work';
+
+export async function getStaticPaths() {
+  const works = await getCollection('work', ({ data }) => !data.draft);
+
+  return works.map((work) => ({
+    params: { id: work.id },
+    props: { work },
+  }));
+}
+
+interface Props {
+  work: CollectionEntry<'work'>;
+}
+
+const { work } = Astro.props;
+const { data } = work;
+const { Content } = await render(work);
+const title = `${data.title} — ${siteConfig.name}`;
+const hasExtendedAuthorList = data.authors.length > 20;
+---
+
+<BaseLayout title={title} description={data.summary} type="article">
+  <article class:list={['work-detail', `accent-${data.accent}`]}>
+    <header class="detail-header">
+      <div class="narrow-container">
+        <a class="back-link" href="/#work">
+          <span aria-hidden="true">←</span> Back to selected work
+        </a>
+
+        <div class="detail-meta">
+          <span>{data.type}</span>
+          <span aria-hidden="true">·</span>
+          <time datetime={data.date.toISOString()}>{formatWorkDate(data.date)}</time>
+          {data.sample && <span class="sample-badge">Sample content</span>}
+        </div>
+
+        <h1>{data.title}</h1>
+        <p class="detail-summary">{data.summary}</p>
+
+        <div class="detail-facts">
+          <div>
+            <span>Status</span>
+            <strong>{data.status}</strong>
+          </div>
+          {
+            data.venue && (
+              <div>
+                <span>Venue</span>
+                <strong>{data.venue}</strong>
+              </div>
+            )
+          }
+          <div>
+            <span>Authors</span>
+            {
+              hasExtendedAuthorList ? (
+                <details class="authors-details">
+                  <summary>{data.authors.length} authors · including {siteConfig.publicationName}</summary>
+                  <p>{data.authors.join(', ')}</p>
+                </details>
+              ) : (
+                <strong>{data.authors.join(', ')}</strong>
+              )
+            }
+          </div>
+        </div>
+
+        {
+          data.links.length > 0 && (
+            <div class="detail-links" aria-label="Project resources">
+              {data.links.map((link) => (
+                <a class="button" href={link.href}>
+                  {link.label}
+                  <Icon name={link.label === 'PDF' ? 'download' : 'external'} size={16} />
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      <div class="container detail-art" aria-hidden="true">
+        {
+          data.cover ? (
+            <img src={data.cover} alt="" />
+          ) : (
+            <div class="detail-generated-art">
+              <span class="detail-grid" />
+              <span class="detail-circle one" />
+              <span class="detail-circle two" />
+              <span class="detail-year">{data.date.getUTCFullYear()}</span>
+              <span class="detail-type">{data.type}</span>
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="detail-content-wrap">
+      <div class="narrow-container content-grid">
+        <aside class="detail-aside">
+          <p>Topics</p>
+          <ul>
+            {data.tags.map((tag) => <li>{tag}</li>)}
+          </ul>
+          {
+            data.contribution && (
+              <div class="contribution">
+                <p>My contribution</p>
+                <span>{data.contribution}</span>
+              </div>
+            )
+          }
+        </aside>
+
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    <footer class="detail-footer">
+      <div class="narrow-container">
+        <p>Interested in this direction?</p>
+        <h2>Let’s compare notes.</h2>
+        <a class="button" href={`mailto:${siteConfig.email}`}>
+          Start a conversation <Icon name="arrow" size={17} />
+        </a>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .work-detail {
+    --accent: var(--violet);
+    --accent-soft: var(--violet-soft);
+  }
+
+  .accent-cyan { --accent: var(--cyan); --accent-soft: var(--cyan-soft); }
+  .accent-coral { --accent: var(--coral); --accent-soft: var(--coral-soft); }
+  .accent-lime { --accent: var(--lime); --accent-soft: var(--lime-soft); }
+
+  .detail-header {
+    padding: clamp(3.5rem, 8vw, 7rem) 0 0;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 690;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-top: clamp(3rem, 7vw, 5rem);
+    color: var(--accent);
+    font-size: 0.68rem;
+    font-weight: 760;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+  }
+
+  .sample-badge {
+    margin-left: auto;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    color: var(--coral);
+    background: var(--coral-soft);
+    font-size: 0.58rem;
+  }
+
+  h1 {
+    max-width: 900px;
+    margin: 1.2rem 0 0;
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    font-weight: 450;
+    letter-spacing: -0.065em;
+    line-height: 0.96;
+  }
+
+  .detail-summary {
+    max-width: 720px;
+    margin: 1.8rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1.05rem, 2vw, 1.28rem);
+    line-height: 1.7;
+  }
+
+  .detail-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .detail-facts div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .detail-facts span,
+  .detail-aside > p,
+  .contribution p {
+    margin: 0;
+    color: var(--muted-light);
+    font-size: 0.6rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .detail-facts strong {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .authors-details {
+    font-size: 0.78rem;
+    line-height: 1.5;
+  }
+
+  .authors-details summary {
+    cursor: pointer;
+    font-weight: 720;
+  }
+
+  .authors-details p {
+    margin: 0.7rem 0 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.65;
+  }
+
+  .detail-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 2rem;
+  }
+
+  .detail-art {
+    position: relative;
+    aspect-ratio: 2.2 / 1;
+    margin-top: clamp(3.5rem, 8vw, 7rem);
+    overflow: hidden;
+    border-radius: clamp(22px, 4vw, 38px) clamp(22px, 4vw, 38px) 0 0;
+    background: var(--accent-soft);
+  }
+
+  .detail-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .detail-generated-art {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.85), transparent 23%),
+      linear-gradient(135deg, var(--accent-soft), color-mix(in srgb, var(--accent) 15%, white));
+  }
+
+  .detail-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.24;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--accent) 35%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--accent) 35%, transparent) 1px, transparent 1px);
+    background-size: 58px 58px;
+  }
+
+  .detail-circle {
+    position: absolute;
+    border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+    border-radius: 50%;
+  }
+
+  .detail-circle.one {
+    width: 48%;
+    aspect-ratio: 1;
+    right: -5%;
+    bottom: -65%;
+    box-shadow:
+      0 0 0 45px color-mix(in srgb, var(--accent) 6%, transparent),
+      0 0 0 95px color-mix(in srgb, var(--accent) 4%, transparent);
+  }
+
+  .detail-circle.two {
+    width: 16%;
+    aspect-ratio: 1;
+    top: 18%;
+    left: 23%;
+    background: color-mix(in srgb, white 18%, transparent);
+  }
+
+  .detail-year {
+    position: absolute;
+    right: 4%;
+    bottom: -5%;
+    color: color-mix(in srgb, var(--accent) 23%, transparent);
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 17vw, 14rem);
+    font-style: italic;
+    letter-spacing: -0.08em;
+    line-height: 0.8;
+  }
+
+  .detail-type {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    color: var(--accent);
+    font-size: 0.66rem;
+    font-weight: 760;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .detail-content-wrap {
+    padding: clamp(4rem, 9vw, 8rem) 0;
+    background: var(--paper-raised);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2rem, 8vw, 7rem);
+  }
+
+  .detail-aside {
+    position: sticky;
+    top: 110px;
+  }
+
+  .detail-aside ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.8rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .detail-aside li {
+    padding: 0.34rem 0.58rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 650;
+  }
+
+  .contribution {
+    margin-top: 2.3rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .contribution span {
+    display: block;
+    margin-top: 0.8rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.65;
+  }
+
+  .prose {
+    min-width: 0;
+    color: #343139;
+  }
+
+  .prose :global(h2) {
+    margin: 3.5rem 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 540;
+    letter-spacing: -0.04em;
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h3) {
+    margin: 2.5rem 0 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.85;
+  }
+
+  .prose :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(img) {
+    margin: 2rem 0;
+    border-radius: var(--radius-md);
+  }
+
+  .prose :global(blockquote) {
+    margin: 2rem 0;
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    border-left: 2px solid var(--accent);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+  }
+
+  .prose :global(pre) {
+    overflow-x: auto;
+    padding: 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+  }
+
+  .detail-footer {
+    padding: clamp(4rem, 10vw, 8rem) 0;
+    color: #f7f5ee;
+    background: #1b191f;
+    text-align: center;
+  }
+
+  .detail-footer p {
+    margin: 0;
+    color: #99949f;
+    font-size: 0.7rem;
+    font-weight: 720;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .detail-footer h2 {
+    margin: 0.8rem 0 1.8rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 440;
+    letter-spacing: -0.055em;
+  }
+
+  .detail-footer :global(.button) {
+    border-color: #f7f5ee;
+    color: #1b191f;
+    background: #f7f5ee;
+  }
+
+  @media (max-width: 680px) {
+    .detail-facts {
+      grid-template-columns: 1fr;
+    }
+
+    .detail-art {
+      aspect-ratio: 1.35 / 1;
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .detail-aside {
+      position: static;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+</style>

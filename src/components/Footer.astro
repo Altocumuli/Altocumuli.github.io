@@ -1,0 +1,101 @@
+---
+import Icon from './Icon.astro';
+import { siteConfig } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <a class="footer-name" href="/">{siteConfig.name}</a>
+      <p>{siteConfig.publicationName} · Research, engineering, and ideas from Tsinghua University.</p>
+    </div>
+
+    <div class="footer-meta">
+      <div class="social-links" aria-label="Social links">
+        {
+          siteConfig.socials.map((social) => (
+            <a href={social.href} aria-label={social.label}>
+              <Icon name={social.icon} size={17} />
+            </a>
+          ))
+        }
+      </div>
+      <p>© {year} {siteConfig.name}. Built with Astro.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: 2.5rem 0 3rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .footer-name {
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    margin: 0.55rem 0 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .footer-meta {
+    text-align: right;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .social-links a {
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    color: var(--muted);
+    transition:
+      transform 160ms ease,
+      color 160ms ease,
+      border-color 160ms ease;
+  }
+
+  .social-links a:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .footer-meta {
+      text-align: left;
+    }
+
+    .social-links {
+      justify-content: flex-start;
+    }
+  }
+</style>

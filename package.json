@@ -1,0 +1,23 @@
+{
+  "name": "jinghan-yang-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "check": "astro check",
+    "build": "astro check && astro build",
+    "deploy": "npm run build && gh-pages -d dist --dotfiles -m 'Deploy personal homepage'",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.1.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "gh-pages": "^6.3.0",
+    "typescript": "^6.0.3"
+  }
+}

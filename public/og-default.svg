@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f4f2eb"/>
+  <circle cx="1080" cy="80" r="330" fill="#e9e1fb"/>
+  <circle cx="1050" cy="100" r="220" fill="none" stroke="#6c45d8" stroke-opacity=".28"/>
+  <path d="M0 530h1200M120 0v630" stroke="#dedbd2"/>
+  <text x="120" y="105" fill="#6c45d8" font-family="Arial,sans-serif" font-size="18" font-weight="700" letter-spacing="4">SOFTWARE ENGINEERING · TSINGHUA UNIVERSITY</text>
+  <text x="120" y="290" fill="#17161b" font-family="serif" font-size="94" letter-spacing="-4">杨憬晗</text>
+  <text x="120" y="390" fill="#17161b" font-family="Georgia,serif" font-size="55" font-style="italic" letter-spacing="-2">Reliable agents for the real world.</text>
+  <text x="120" y="535" fill="#69666f" font-family="Arial,sans-serif" font-size="22">Jinghan Yang · LLM Agents · Agentic RL</text>
+</svg>

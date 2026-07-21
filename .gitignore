@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# generated output
+dist/
+.astro/
+
+# local environment files
+.env
+.env.*
+!.env.example
+
+# editor / system files
+.DS_Store
+.idea/
+.vscode/
+
+# local content intake; contains unpublished source notes
+message.md
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
