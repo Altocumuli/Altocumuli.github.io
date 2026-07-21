@@ -1,0 +1,15 @@
+{
+  "name": "杨憬晗 — Undergraduate Researcher",
+  "short_name": "杨憬晗",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f2eb",
+  "theme_color": "#f4f2eb",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
