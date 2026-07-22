@@ -1,4 +1,4 @@
-# 杨憬晗 — 个人学术主页
+# 杨憬晗（Altocumuli）— 个人学术主页
 
 一个面向导师、实验室和研究合作者的英文个人主页，使用 Astro、TypeScript 和 Markdown 构建，可直接部署到 GitHub Pages。
 

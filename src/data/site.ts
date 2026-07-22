@@ -29,14 +29,15 @@ export const siteConfig = {
    */
   isDraft: false,
   name: '杨憬晗',
+  englishName: 'Altocumuli',
   publicationName: 'Jinghan Yang',
   initials: '杨',
-  title: '杨憬晗 — Undergraduate Researcher at Tsinghua University',
+  title: '杨憬晗 (Altocumuli) — Undergraduate Researcher at Tsinghua University',
   description:
     'Software Engineering undergraduate at Tsinghua University researching LLM agents, agentic reinforcement learning, and reliable agent systems.',
   institution: 'Tsinghua University',
   location: 'Beijing, China',
-  eyebrow: 'Software Engineering · Tsinghua University',
+  eyebrow: 'Altocumuli · Software Engineering · Tsinghua University',
   headline: 'Building reliable agents for the real world.',
   introduction:
     'I am a third-year Software Engineering undergraduate at Tsinghua University. I study LLM agents, with a current focus on agentic reinforcement learning and harness design for long-horizon systems that operate reliably in the real world.',

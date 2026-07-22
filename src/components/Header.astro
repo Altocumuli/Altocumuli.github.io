@@ -12,9 +12,12 @@ const navItems = [
 
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label={`${siteConfig.initials} — ${siteConfig.name}, home`}>
+    <a class="brand" href="/" aria-label={`${siteConfig.initials} — ${siteConfig.name}, ${siteConfig.englishName}, home`}>
       <span class="brand-mark" aria-hidden="true">{siteConfig.initials}</span>
-      <span class="brand-name">{siteConfig.name}</span>
+      <span class="brand-name">
+        {siteConfig.name}
+        <small>{siteConfig.englishName}</small>
+      </span>
     </a>
 
     <nav aria-label="Primary navigation">
@@ -75,6 +78,19 @@ const navItems = [
     font-family: var(--font-display);
     font-size: 0.72rem;
     font-style: italic;
+  }
+
+  .brand-name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .brand-name small {
+    color: var(--muted);
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
   }
 
   nav ul {
